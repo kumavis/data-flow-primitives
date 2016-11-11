@@ -36,7 +36,8 @@ function multiplexTransform(originChannel, message) {
 [nomnoml-3-img]: https://cloud.githubusercontent.com/assets/1474978/20232867/2d48f048-a820-11e6-850e-0e83fdfe40df.png
 [nomnoml-3-link]: http://www.nomnoml.com/#view/%5B%3Creceiver%3EA%20(in)%5D%0A%5B%3Csender%3EA%20(out)%5D%0A%5B%3Creceiver%3EB%20(in)%5D%0A%5B%3Csender%3EB%20(out)%5D%0A%5B%3Creceiver%3EMulti%20(in)%5D%0A%5B%3Csender%3EMulti%20(out)%5D%0A%5B%3Cframe%3E%20multiplex%5D%0A%5B%3Cchoice%3E%20de-multiplex%5D%0A%0A%5B%3Creceiver%3EA%20(in)%5D-%3E%5B%3Cframe%3E%20multiplex%5D%0A%5B%3Creceiver%3EB%20(in)%5D-%3E%5B%3Cframe%3E%20multiplex%5D%0A%0A%5B%3Cframe%3E%20multiplex%5D-%3E%5B%3Creceiver%3EMulti%20(in)%5D%0A%5B%3Creceiver%3EMulti%20(in)%5D-%3E%5B%3Csender%3EMulti%20(out)%5D%0A%5B%3Csender%3EMulti%20(out)%5D-%3E%5B%3Cframe%3E%20de-multiplex%5D%0A%0A%5Bde-multiplex%5D-%3E%5B%3Creceiver%3EA%20(out)%5D%0A%5Bde-multiplex%5D-%3E%5B%3Creceiver%3EB%20(out)%5D%0A
 
-* duplex channel: you can have bi-directional communication by pairing 2 uni-directional channels in opposite directions
+* duplex channel: you can have bi-directional communication by pairing 2 uni-directional channels in opposite directions. this is useful for making requests and getting a response.
+
 [![nomnoml 4][nomnoml-4-img]][nomnoml-4-link]
 
 [nomnoml-4-img]: https://cloud.githubusercontent.com/assets/1474978/20233258/e4dad10c-a822-11e6-9c58-33b9bbbdfb21.png
@@ -47,26 +48,41 @@ http://www.nomnoml.com/#view/%5BDuplexChannel%7C%0A%5B%3Creceiver%3Elocal%20(in)
 
 ### data flow direction
 
-- pull:
-  - send request, get response
-  - calling a fn
-  - lazy-computed values
-  - pull-streams
-  - sending eth rpc requests
+##### push
 
-- push:
+Push happens over a Channel. Something announces a new message. Even though this is the same as our fundamental elements above, lets call it a PushChannel which communicates from a PushSource to a PushSink.
+
+some examples:
   - send data
   - handler being called
-  - event emitters
+  - EventEmitters
   - observables (redux store)
   - current block (via poller)
   - standard streams
   - receiving dapp eth rpc requests
+  
+Pull happens over a DuplexChannel. Something makes a request, and then gets a response. If there is this request-response behavior, You can think of this as a single PullChannel between a PullSource and a PullSink.
+
+some examples:
+  - send request, get response
+  - calling a fn
+  - lazy-computed values
+  - sending http requests
+  - pull-streams
+
 
 ### flow direction adapters
 
- - push->pull (cache/disk)
- - pull->push (poll/network)
+If you have a PushSource and you want it to talk to a PullSink, you will need an adapter.
+
+ - PushSource->PullSink adapter (storage I/O)
+ 
+  The PushSource->PullSink adapter is storage (a cache). It stores the latest value from PushSource, and sends it to the PullSink when requested.
+ 
+ - PullSource->PushSink (network I/O)
+ 
+  The PullSource->PushSink adapter is a poller. It polls for the latest value (since it cant know when it was update) and then sends that value along to the PushSink. Implementations may choose to only push to the PushSink if the value has changed.
+ 
 
 ## flow transforms
 
