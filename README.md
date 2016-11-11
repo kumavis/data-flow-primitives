@@ -44,9 +44,7 @@ function multiplexTransform(originChannel, message) {
 [nomnoml-4-link]:
 http://www.nomnoml.com/#view/%5BDuplexChannel%7C%0A%5B%3Creceiver%3Elocal%20(in)%5D%0A%5B%3Csender%3Elocal%20(out)%5D%0A%5B%3Creceiver%3Eremote%20(in)%5D%0A%5B%3Csender%3Eremote%20(out)%5D%0A%0A%5B%3Creceiver%3Elocal%20(in)%5D-%3E%5B%3Csender%3Eremote%20(out)%5D%0A%5B%3Csender%3Elocal%20(out)%5D%3C-%5B%3Creceiver%3Eremote%20(in)%5D%0A%5D
 
-## data flow
-
-### data flow direction
+## data flow direction
 
 ##### push
 
@@ -60,6 +58,8 @@ some examples:
   - current block (via poller)
   - standard streams
   - receiving dapp eth rpc requests
+
+##### pull
   
 Pull happens over a DuplexChannel. Something makes a request, and then gets a response. If there is this request-response behavior, You can think of this as a single PullChannel between a PullSource and a PullSink.
 
