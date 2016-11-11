@@ -3,18 +3,38 @@
 ## fundamental elements
 
 * message: any value (string, obj, etc)
-* channel: uni-directional paths that messages travel across
+* source: an emitter of messages
+* sink: a destination for messages
+* channel: uni-directional path between a source and a sink
+
+[![nomnoml 1][nomnoml-1-img]][nomnoml-1-link]
+
+[nomnoml-1-img]: https://cloud.githubusercontent.com/assets/1474978/20232340/79b0a95c-a81c-11e6-8e7f-9b33d0a3d6e5.png
+[nomnoml-1-link]: http://www.nomnoml.com/#view/%5B%3Creceiver%3EA%20(in)%5D%0A%5B%3Csender%3EA%20(out)%5D%0A%5B%3Creceiver%3EA%20(in)%5D-%3E%5B%3Csender%3EA%20(out)%5D%0A
 
 ## composition
+
+* transform: a sink and a source. mutates the message.
+
+[![nomnoml 2][nomnoml-2-img]][nomnoml-2-link]
+
+[nomnoml-2-img]: https://cloud.githubusercontent.com/assets/1474978/20232637/7d301e76-a81e-11e6-89ac-d9d7ca1fc19e.png
+[nomnoml-2-link]: http://www.nomnoml.com/#view/%5B%3Creceiver%3E(in)%5D%0A%5B%3Cframe%3E%20transform%5D%0A%5B%3Csender%3E(out)%5D%0A%5B%3Creceiver%3E(in)%5D-%3E%5B%3Cframe%3E%20transform%5D%0A%5B%3Cframe%3E%20transform%5D-%3E%5B%3Csender%3E(out)%5D%0A
 
 * multichannel: you can wrap multiple channels in a single channel by wrapping the message with metadata
 
 ```js
-message = {
-  channel: 'channelA',
-  data: originalMessage,
+function multiplexTransform(originChannel, message) {
+  return {
+    channel: originChannel,
+    data: message,
+  }
 }
 ```
+[![nomnoml 3][nomnoml-3-img]][nomnoml-3-link]
+
+[nomnoml-3-img]: https://cloud.githubusercontent.com/assets/1474978/20232867/2d48f048-a820-11e6-850e-0e83fdfe40df.png
+[nomnoml-3-link]: http://www.nomnoml.com/#view/%5B%3Creceiver%3EA%20(in)%5D%0A%5B%3Csender%3EA%20(out)%5D%0A%5B%3Creceiver%3EB%20(in)%5D%0A%5B%3Csender%3EB%20(out)%5D%0A%5B%3Creceiver%3EMulti%20(in)%5D%0A%5B%3Csender%3EMulti%20(out)%5D%0A%5B%3Cframe%3E%20multiplex%5D%0A%5B%3Cchoice%3E%20de-multiplex%5D%0A%0A%5B%3Creceiver%3EA%20(in)%5D-%3E%5B%3Cframe%3E%20multiplex%5D%0A%5B%3Creceiver%3EB%20(in)%5D-%3E%5B%3Cframe%3E%20multiplex%5D%0A%0A%5B%3Cframe%3E%20multiplex%5D-%3E%5B%3Creceiver%3EMulti%20(in)%5D%0A%5B%3Creceiver%3EMulti%20(in)%5D-%3E%5B%3Csender%3EMulti%20(out)%5D%0A%5B%3Csender%3EMulti%20(out)%5D-%3E%5B%3Cframe%3E%20de-multiplex%5D%0A%0A%5Bde-multiplex%5D-%3E%5B%3Creceiver%3EA%20(out)%5D%0A%5Bde-multiplex%5D-%3E%5B%3Creceiver%3EB%20(out)%5D%0A
 
 * duplex channel: you can have bi-directional communication by pairing 2 uni-directional channels in opposite directions
 
