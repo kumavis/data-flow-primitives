@@ -21,7 +21,7 @@
 [nomnoml-2-img]: https://cloud.githubusercontent.com/assets/1474978/20232637/7d301e76-a81e-11e6-89ac-d9d7ca1fc19e.png
 [nomnoml-2-link]: http://www.nomnoml.com/#view/%5B%3Creceiver%3E(in)%5D%0A%5B%3Cframe%3E%20transform%5D%0A%5B%3Csender%3E(out)%5D%0A%5B%3Creceiver%3E(in)%5D-%3E%5B%3Cframe%3E%20transform%5D%0A%5B%3Cframe%3E%20transform%5D-%3E%5B%3Csender%3E(out)%5D%0A
 
-* multichannel: you can wrap multiple channels in a single channel by wrapping the message with metadata
+* multichannel: you can wrap multiple channels in a single channel by wrapping the message with metadata. this is useful if you want to send multiple channels over a single network connection.
 
 ```js
 function multiplexTransform(originChannel, message) {
@@ -37,6 +37,11 @@ function multiplexTransform(originChannel, message) {
 [nomnoml-3-link]: http://www.nomnoml.com/#view/%5B%3Creceiver%3EA%20(in)%5D%0A%5B%3Csender%3EA%20(out)%5D%0A%5B%3Creceiver%3EB%20(in)%5D%0A%5B%3Csender%3EB%20(out)%5D%0A%5B%3Creceiver%3EMulti%20(in)%5D%0A%5B%3Csender%3EMulti%20(out)%5D%0A%5B%3Cframe%3E%20multiplex%5D%0A%5B%3Cchoice%3E%20de-multiplex%5D%0A%0A%5B%3Creceiver%3EA%20(in)%5D-%3E%5B%3Cframe%3E%20multiplex%5D%0A%5B%3Creceiver%3EB%20(in)%5D-%3E%5B%3Cframe%3E%20multiplex%5D%0A%0A%5B%3Cframe%3E%20multiplex%5D-%3E%5B%3Creceiver%3EMulti%20(in)%5D%0A%5B%3Creceiver%3EMulti%20(in)%5D-%3E%5B%3Csender%3EMulti%20(out)%5D%0A%5B%3Csender%3EMulti%20(out)%5D-%3E%5B%3Cframe%3E%20de-multiplex%5D%0A%0A%5Bde-multiplex%5D-%3E%5B%3Creceiver%3EA%20(out)%5D%0A%5Bde-multiplex%5D-%3E%5B%3Creceiver%3EB%20(out)%5D%0A
 
 * duplex channel: you can have bi-directional communication by pairing 2 uni-directional channels in opposite directions
+[![nomnoml 4][nomnoml-4-img]][nomnoml-4-link]
+
+[nomnoml-4-img]: https://cloud.githubusercontent.com/assets/1474978/20233258/e4dad10c-a822-11e6-9c58-33b9bbbdfb21.png
+[nomnoml-4-link]:
+http://www.nomnoml.com/#view/%5BDuplexChannel%7C%0A%5B%3Creceiver%3Elocal%20(in)%5D%0A%5B%3Csender%3Elocal%20(out)%5D%0A%5B%3Creceiver%3Eremote%20(in)%5D%0A%5B%3Csender%3Eremote%20(out)%5D%0A%0A%5B%3Creceiver%3Elocal%20(in)%5D-%3E%5B%3Csender%3Eremote%20(out)%5D%0A%5B%3Csender%3Elocal%20(out)%5D%3C-%5B%3Creceiver%3Eremote%20(in)%5D%0A%5D
 
 ## data flow
 
